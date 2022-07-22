@@ -25,6 +25,10 @@ export class BoardRepository extends AbstractRepository<Board> {
   async delete(id: number): Promise<DeleteResult> {
     return this.repository.delete(id);
   }
+
+  async findAndCount(): Promise<[Board[], number]> {
+    return this.repository.findAndCount();
+  }
 }
 // (Repository) this.save 구현체 -> (AbstractRepository) this.repository.save 인터페이스 (눌러서 보면 암 ~ 하위개념과 상위 개념임)
 

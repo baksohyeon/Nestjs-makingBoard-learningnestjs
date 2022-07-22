@@ -26,7 +26,7 @@ export class BoardsService {
     return board;
   }
 
-  //read
+  // Read
   async getBoardByID(id: number): Promise<Board> {
     try {
       const found = await this.boardRepository.findOne(id);
@@ -42,7 +42,19 @@ export class BoardsService {
     }
   }
 
-  async delete(id: number): Promise<DeleteBoardDto> {
+  async getAllBoards(): Promise<[Board[], number]> {
+    return this.boardRepository.findAndCount();
+  }
+
+  // Update
+  async updateBoardStatus(id: number, status: BoardStatus) {
+    const selectedBoard = await this.getBoardByID(id);
+    selectedBoard.status = status;
+    await this.boardRepository.save(selectedBoard);
+    return selectedBoard;
+  }
+
+  async deleteById(id: number): Promise<DeleteBoardDto> {
     try {
       const deleteResult = await this.boardRepository.delete(id);
       const affectedRow = deleteResult.affected;
