@@ -11,7 +11,7 @@ export class Board extends BaseEntity {
     this.title = createBoardDto.title;
     this.description = createBoardDto.description;
     this.status = BoardStatus.PUBLIC;
-  }
+  } // service 에서 씀
 
   @PrimaryGeneratedColumn()
   id: number;
