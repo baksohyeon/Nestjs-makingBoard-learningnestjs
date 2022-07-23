@@ -4,7 +4,7 @@ import {
   PipeTransform,
 } from '@nestjs/common';
 import { BoardStatus } from '../board-status.enum';
-
+// class-validator, class-transformer 설치
 //모든 파이프에는 pipeTransform이 있어야함
 export class BoardStatusValidationPipe implements PipeTransform {
   readonly StatusOptions = [BoardStatus.PRIVATE, BoardStatus.PUBLIC];

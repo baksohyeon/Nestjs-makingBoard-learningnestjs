@@ -10,6 +10,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { BoardRepository } from './board.repository';
 import { Board } from './board.entity';
 import { DeleteBoardDto } from './dto/delete-board.dto';
+import { UpdateUserDto } from './dto/update-board.dto';
+import { DeleteDateColumn } from 'typeorm';
 
 @Injectable()
 export class BoardsService {
@@ -21,8 +23,7 @@ export class BoardsService {
   //Create
   async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
     const board = new Board(createBoardDto);
-    await this.boardRepository.save(board);
-    return board;
+    return this.boardRepository.save(board);
   }
 
   // Read
@@ -46,12 +47,23 @@ export class BoardsService {
   }
 
   // Update
-  async updateBoardStatus(id: number, status: BoardStatus) {
+  async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
     const selectedBoard = await this.getBoardByID(id);
     selectedBoard.status = status;
-    await this.boardRepository.save(selectedBoard);
-    return selectedBoard;
+    return this.boardRepository.save(selectedBoard);
   }
+
+  async updateContextById(
+    id: number,
+    updateRequest: UpdateUserDto,
+  ): Promise<Board> {
+    try {
+      const toUpdateBoard = await this.getBoardByID(id);
+      toUpdateBoard.title = updateRequest.title;
+      toUpdateBoard.description = updateRequest.description;
+      return await this.boardRepository.save(toUpdateBoard);
+    } catch (e) {}
+  } //에러잡기 주석 커넥션 타임 줄다보니까 타임아웃 - - - - -
 
   //Delete
   async deleteById(id: number): Promise<DeleteBoardDto> {

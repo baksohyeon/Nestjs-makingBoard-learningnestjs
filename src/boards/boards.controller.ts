@@ -16,6 +16,7 @@ import { Board } from './board.entity';
 import { BoardsService } from './boards.service';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { DeleteBoardDto } from './dto/delete-board.dto';
+import { UpdateUserDto } from './dto/update-board.dto';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 
 @Controller('boards')
@@ -31,12 +32,12 @@ export class BoardsController {
 
   // read
   @Get('/:id')
-  getBoardById(@Param('id') id: number): Promise<Board> {
+  getBoardById(@Param('id', ParseIntPipe) id: number): Promise<Board> {
     return this.boardService.getBoardByID(id);
   }
 
   @Get()
-  getAllBoards() {
+  getAllBoards(): Promise<[Board[], number]> {
     return this.boardService.getAllBoards();
   }
 
@@ -49,9 +50,20 @@ export class BoardsController {
     return this.boardService.updateBoardStatus(id, status);
   }
 
+  @Patch('/:id/update')
+  @UsePipes(ValidationPipe)
+  async updateBoardContext(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateRequest: UpdateUserDto,
+  ) {
+    return this.boardService.updateContextById(id, updateRequest);
+  }
+
   // Delete
   @Delete('/:id')
-  async deleteBoardById(@Param('id') id: number): Promise<DeleteBoardDto> {
+  async deleteBoardById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<DeleteBoardDto> {
     return this.boardService.deleteById(id);
   }
 }

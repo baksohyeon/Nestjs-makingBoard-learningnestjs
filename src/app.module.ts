@@ -9,7 +9,7 @@ dotenv.config();
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'localhost',
+      host: 'localhost', // 네트워크 레이어 트랜스포트 레이어
       port: 3306,
       username: process.env.LOCAL_DATABASE_USERNAME,
       password: process.env.LOCAL_DATABASE_PASSWORD,
